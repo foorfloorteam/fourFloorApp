@@ -19,3 +19,18 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.cell {
+  margin-bottom: 10px;
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+}
+.cell-color {
+  background-color: red;
+}
+
+.active {
+  background-color: rgb(23, 21, 21);
+}
