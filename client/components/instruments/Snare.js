@@ -46,17 +46,22 @@ export class Snare extends React.Component {
     console.log(this.state.snare)
   }
   handlePlay() {
-    const synth = new Tone.MembraneSynth().toMaster()
-    const synthPart = new Tone.Sequence(
-      function(time, note) {
-        synth.triggerAttackRelease(note, '10hz', time)
-      },
-      this.state.snare,
-      '16n'
-    )
-    synthPart.start()
-    Tone.Transport.start()
-  }
+    const snare = new Tone.MembraneSynth().toMaster()
+
+    const snarePart = new Tone.Sequence(
+          function(time, note) {
+            snare.triggerAttackRelease(note, '10hz', time)
+          },
+          this.state.snare,
+          '16n'
+        )
+        Tone.Transport.loopEnd = '1m'
+        Tone.Transport.loop = true
+        snarePart.start()
+        Tone.Transport.start()
+        snare.sync()
+    }
+
   render() {
     console.log(this.state)
     const {snare} = this.state
@@ -64,11 +69,15 @@ export class Snare extends React.Component {
       <div>
         <Row>
           <Col xs={2}>
-            <button type="button" onClick={this.handlePlay}>
-              playSynth
-            </button>
             <Card>
-              <Card.Title>Snare</Card.Title>
+              <Row>
+                <Col xs={6}>
+                  <button type="button" className="on-Off" onClick={this.handlePlay}>X</button>
+                </Col>
+                <Col xs={6}>
+                  <Card.Title className="track-title">Snare</Card.Title>
+                </Col>
+              </Row>
             </Card>
           </Col>
           <Col xs={10}>
@@ -92,3 +101,4 @@ export class Snare extends React.Component {
     )
   }
 }
+

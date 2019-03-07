@@ -28,9 +28,19 @@ form div {
   display: inline-block;
 }
 .cell-color {
-  background-color: red;
+  background-color: rgb(85, 171, 237);
 }
 
 .active {
-  background-color: rgb(23, 21, 21);
+  background-color: rgb(216, 216, 90);
+}
+
+.on-Off {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+.track-title {
+  display: inline-block !important;
+  font-size: 14px;
 }

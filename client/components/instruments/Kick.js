@@ -54,16 +54,19 @@ export class Kick extends React.Component {
   }
   render() {
     const {kick} = this.state
-    console.log(this.state)
     return (
       <div>
         <Row>
           <Col xs={2}>
-            <button type="button" onClick={this.handlePlay}>
-              playSynth
-            </button>
             <Card>
-              <Card.Title>Kick</Card.Title>
+              <Row>
+                <Col xs={6}>
+                  <button type="button" className="on-Off" onClick={this.handlePlay}>X</button>
+                </Col>
+                <Col xs={6}>
+                  <Card.Title className="track-title">Kick</Card.Title>
+                </Col>
+              </Row>
             </Card>
           </Col>
           <Col xs={10}>
