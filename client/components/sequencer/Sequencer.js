@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import Tone from 'Tone'
+import Transport from './Transport'
 
 class Sequencer extends React.Component {
   constructor(synth) {
@@ -28,6 +29,7 @@ class Sequencer extends React.Component {
     return (
       <div className="container">
         <h1>Hello from Sequencer Component!</h1>
+        <Transport />
         <button type="button" onClick={this.handlePlay}>
           playSynth
         </button>
