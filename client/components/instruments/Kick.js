@@ -61,7 +61,13 @@ export class Kick extends React.Component {
             <Card>
               <Row>
                 <Col xs={6}>
-                  <button type="button" className="on-Off" onClick={this.handlePlay}>X</button>
+                  <button
+                    type="button"
+                    className="on-Off"
+                    onClick={this.handlePlay}
+                  >
+                    X
+                  </button>
                 </Col>
                 <Col xs={6}>
                   <Card.Title className="track-title">Kick</Card.Title>

@@ -49,18 +49,18 @@ export class Snare extends React.Component {
     const snare = new Tone.MembraneSynth().toMaster()
 
     const snarePart = new Tone.Sequence(
-          function(time, note) {
-            snare.triggerAttackRelease(note, '10hz', time)
-          },
-          this.state.snare,
-          '16n'
-        )
-        Tone.Transport.loopEnd = '1m'
-        Tone.Transport.loop = true
-        snarePart.start()
-        Tone.Transport.start()
-        snare.sync()
-    }
+      function(time, note) {
+        snare.triggerAttackRelease(note, '10hz', time)
+      },
+      this.state.snare,
+      '16n'
+    )
+    Tone.Transport.loopEnd = '1m'
+    Tone.Transport.loop = true
+    snarePart.start()
+    Tone.Transport.start()
+    snare.sync()
+  }
 
   render() {
     console.log(this.state)
@@ -72,7 +72,13 @@ export class Snare extends React.Component {
             <Card>
               <Row>
                 <Col xs={6}>
-                  <button type="button" className="on-Off" onClick={this.handlePlay}>X</button>
+                  <button
+                    type="button"
+                    className="on-Off"
+                    onClick={this.handlePlay}
+                  >
+                    X
+                  </button>
                 </Col>
                 <Col xs={6}>
                   <Card.Title className="track-title">Snare</Card.Title>
@@ -101,4 +107,3 @@ export class Snare extends React.Component {
     )
   }
 }
-
