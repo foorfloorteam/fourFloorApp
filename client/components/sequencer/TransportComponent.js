@@ -1,5 +1,17 @@
 import React from 'react'
+import {connect} from 'react-redux'
 import Tone from 'Tone'
+
+const patternBank = [
+  ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3', 'A4', 'B4'],
+  ['C2', null, 'C2', null, 'C2', null, 'C2', null, 'C2', null, 'C2', null, 'C2', null, 'C2', null]
+]
+
+const synth = new Tone.MonoSynth().toMaster().sync()
+const triggerSynth = time => synth.triggerAttackRelease('C2', '4n', time)
+const seq = new Tone.Sequence(triggerSynth, patternBank[0], '16n')
+seq.start()
+Tone.Transport.schedule(triggerSynth, 0)
 
 class TransportComponent extends React.Component {
   constructor() {
@@ -93,4 +105,6 @@ class TransportComponent extends React.Component {
   }
 }
 
-export default TransportComponent
+const mapState = state => ({ playbackState: state.playbackState, tempo: state.tempo, loopLength: state.loopLength })
+
+export default connect(mapState)(TransportComponent)

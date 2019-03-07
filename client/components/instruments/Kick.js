@@ -49,8 +49,8 @@ export class Kick extends React.Component {
       this.state.kick,
       '16n'
     )
-    synthPart.start()
-    Tone.Transport.start()
+    // synthPart.start()
+    // Tone.Transport.start()
   }
   render() {
     const {kick} = this.state
