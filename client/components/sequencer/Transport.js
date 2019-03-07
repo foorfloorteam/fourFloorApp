@@ -2,37 +2,36 @@ import React from 'react'
 import {connect} from 'react-redux'
 import Tone from 'Tone'
 
-const synth = new Tone.MembraneSynth().toMaster()
-const sequence = ['C2', 'C2', 'C2', 'C2']
-const kickSeq = new Tone.Sequence(
-  (time, note) => {
-    synth.triggerAttackRelease(note, '10hz', time)
-  },
-  sequence,
-  '4n'
-)
+// const synth = new Tone.MembraneSynth().toMaster()
+// const sequence = ['C2', 'C2', 'C2', 'C2']
+// const kickSeq = new Tone.Sequence(
+//   (time, note) => {
+//     synth.triggerAttackRelease(note, '10hz', time)
+//   },
+//   sequence,
+//   '4n'
+// )
 
 class Transport extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
-      isPlaying: false,
       tempo: 120
     }
 
-    this.togglePlayback = this.togglePlayback.bind(this)
+    // this.togglePlayback = this.togglePlayback.bind(this)
     this.setTempo = this.setTempo.bind(this)
     this.handleDecrement = this.handleDecrement.bind(this)
     this.handleIncrement = this.handleIncrement.bind(this)
     this.clearTimers = this.clearTimers.bind(this)
   }
 
-  togglePlayback(e) {
-    e.preventDefault()
-    kickSeq.start()
-    this.setState(prevState => ({isPlaying: !prevState.isPlaying}))
-    this.state.isPlaying ? Tone.Transport.start() : Tone.Transport.stop()
-  }
+  // togglePlayback(e) {
+  //   e.preventDefault()
+  //   kickSeq.start()
+  //   this.setState(prevState => ({isPlaying: !prevState.isPlaying}))
+  //   this.state.isPlaying ? Tone.Transport.start() : Tone.Transport.stop()
+  // }
 
   setTempo(newTempo) {
     this.setState(prevState => ({tempo: newTempo}))
@@ -54,12 +53,13 @@ class Transport extends React.Component {
   }
 
   render() {
+    const {handlePlay} = this.props
     return (
       <div className="container">
         <h1>Hello from Transport Component!</h1>
         <>
-          <button type="button" onClick={this.togglePlayback}>
-            togglePlayback
+          <button type="button" onClick={handlePlay}>
+            handlePlay
           </button>
           <br />
         </>
@@ -70,7 +70,7 @@ class Transport extends React.Component {
             onMouseUp={this.clearTimers}
             onMouseLeave={this.clearTimers}
           >
-            slowthefuckdown
+            -
           </button>
           {this.state.tempo}
           <button
@@ -79,7 +79,7 @@ class Transport extends React.Component {
             onMouseUp={this.clearTimers}
             onMouseLeave={this.clearTimers}
           >
-            speedthefuckup
+            +
           </button>
           <br />
         </>

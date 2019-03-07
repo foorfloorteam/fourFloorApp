@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import Tone from 'Tone'
 import {Kick} from '../instruments/Kick'
 import {Snare} from '../instruments/Snare'
-import Transport from './Transport'
+import TransportComponent from './TransportComponent'
 
 class Sequencer extends React.Component {
   constructor(synth) {
@@ -12,7 +12,8 @@ class Sequencer extends React.Component {
       active: [],
       css: 'active',
       kick: [],
-      snare: []
+      snare: [],
+      isPlaying: false
     }
     this.notes = ['C3', 'Eb3', 'G3', 'Bb3']
     this.handlePlay = this.handlePlay.bind(this)
@@ -33,17 +34,19 @@ class Sequencer extends React.Component {
       snare: row
     })
   }
-  handlePlay() {
+  handlePlay(e) {
+    e.preventDefault()
     const synth = new Tone.MembraneSynth().toMaster()
     const synthPart = new Tone.Sequence(
       function(time, note) {
-        synth.triggerAttackRelease(note, '10hz', time)
+        synth.triggerAttackRelease(note, '10hz', time).sync()
       },
       this.state.kick,
       '16n'
     )
     synthPart.start()
-    Tone.Transport.start()
+    this.setState(prevState => ({isPlaying: !prevState.isPlaying}))
+    this.state.isPlaying ? Tone.Transport.start() : Tone.Transport.stop()
   }
   toggleActive(idx) {
     this.setState({
@@ -61,19 +64,13 @@ class Sequencer extends React.Component {
   render() {
     return (
       <div className="container">
-        <h1>Hello from Sequencer Component!</h1>
-        <Transport />
-        <button type="button" onClick={this.handlePlay}>
-          playSynth
-        </button>
-
+        <TransportComponent />
         <Kick
           kickArray={this.state.kick}
           active={this.state.active}
           css={this.state.css}
           pushKickVal={this.pushKickVal}
         />
-
         <Snare
           snareArray={this.state.snare}
           active={this.state.active}
