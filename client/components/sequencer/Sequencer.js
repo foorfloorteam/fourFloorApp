@@ -17,10 +17,10 @@ class Sequencer extends React.Component {
     return (
       <div className="container">
         <h1>Hello from Sequencer Component!</h1>
-        <Transport />
-        <Kick />
+        <TransportComponent />
+        {/* <Kick />
 
-        <Snare />
+        <Snare /> */}
       </div>
     )
   }
