@@ -55,15 +55,15 @@ export class Snare extends React.Component {
       this.state.snare,
       '16n'
     )
-    Tone.Transport.loopEnd = '1m'
-    Tone.Transport.loop = true
-    snarePart.start()
-    Tone.Transport.start()
-    snare.sync()
+    // Tone.Transport.loopEnd = '1m'
+    // Tone.Transport.loop = true
+    // snarePart.start()
+    // Tone.Transport.start()
+    // snare.sync()
   }
 
   render() {
-    console.log(this.state)
+    console.log(this.state.snare)
     const {snare} = this.state
     return (
       <div>

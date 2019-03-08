@@ -18,9 +18,9 @@ class Sequencer extends React.Component {
       <div className="container">
         <h1>Hello from Sequencer Component!</h1>
         <TransportComponent />
-        {/* <Kick />
+        <Kick />
 
-        <Snare /> */}
+        <Snare />
       </div>
     )
   }

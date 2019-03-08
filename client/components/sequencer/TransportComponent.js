@@ -1,4 +1,5 @@
 import React from 'react'
+import {connect} from 'react-redux'
 import Tone from 'Tone'
 
 // const synth = new Tone.MonoSynth().toMaster().sync()
@@ -99,4 +100,6 @@ class TransportComponent extends React.Component {
   }
 }
 
-export default TransportComponent
+const mapState = state => ({ playbackState: state.playbackState, tempo: state.tempo, loopLength: state.loopLength })
+
+export default connect(mapState)(TransportComponent)
