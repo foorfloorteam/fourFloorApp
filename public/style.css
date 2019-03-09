@@ -44,3 +44,9 @@ form div {
   display: inline-block !important;
   font-size: 14px;
 }
+
+.center {
+  display: block;
+  width: 60%;
+  margin: 0 auto;
+}

@@ -4,7 +4,7 @@ import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Login, Signup, UserHome, Sequencer} from './components'
 import {me} from './store'
-
+import {DrumMachine} from './components/DrumMachine'
 /**
  * COMPONENT
  */
@@ -26,6 +26,7 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             <Route path="/sequencer" component={Sequencer} />
+            <Route path='/drumMachine' component={DrumMachine} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

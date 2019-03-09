@@ -56,7 +56,10 @@ class TransportComponent extends React.Component {
     Tone.Transport.scheduleRepeat(() => {
       this.setState({position: Tone.Transport.position.slice(0, 5)})
     }, '16n')
-    this.interval = setInterval(() => console.log('Tick Tock: ', this.state.position), 125)
+    this.interval = setInterval(
+      () => console.log('Tick Tock: ', this.state.position),
+      125
+    )
   }
 
   render() {

@@ -12,12 +12,13 @@ class Sequencer extends React.Component {
       css: 'active'
     }
   }
-  
+
   render() {
     return (
       <div className="container">
         <h1>Hello from Sequencer Component!</h1>
-        <TransportComponent />
+        {/* <TransportComponent /> */}
+        <Kick />
         <Snare />
       </div>
     )
