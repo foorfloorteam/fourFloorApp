@@ -9,8 +9,7 @@ export const Row = (props) => {
         button-channel={props.channelNum}
         key={`${v}${i}`}
         onClick={() => props.updatePattern(props.channelNum, i)}
-      >
-      </div>
+       />
     )
   }
   return (
