@@ -4,7 +4,7 @@ import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Login, Signup, UserHome, Sequencer} from './components'
 import {me} from './store'
-import {DrumMachine} from './components/DrumMachine'
+import {DrumMachine} from './components'
 /**
  * COMPONENT
  */
