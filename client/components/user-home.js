@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-
+import {Button} from 'react-bootstrap'
 /**
  * COMPONENT
  */
@@ -9,9 +9,12 @@ export const UserHome = props => {
   const {user} = props
 
   return (
-    <div>
-      <h3>Welcome to FourFloor, {user.name}</h3>
-      <Link to="/sequencer">MAKE SOME BEATS</Link>
+    <div className="center text-center marg-top">
+      <h3>Welcome to fourFloor, {user.name}</h3>
+      <br />
+      <Link to="/drumMachine">
+        <Button variant="outline-dark">Make some beats!</Button>
+      </Link>
     </div>
   )
 }

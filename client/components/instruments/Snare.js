@@ -1,20 +1,21 @@
 import React from 'react'
 import {Card, Col, Row} from 'react-bootstrap'
 import Tone from 'Tone'
-
-var player = new Tone.Player('../../1-snare1.wav').toMaster()
+import {demoTrack2} from '../../../public/scripts/demo2'
 
 export class Snare extends React.Component {
   constructor() {
     super()
     this.state = {
-      snare: [],
+      snare: demoTrack2[1],
       active: [],
-      css: 'active'
+      css: 'active',
+      instrument: []
     }
     this.pushSnareVal = this.pushSnareVal.bind(this)
     this.toggleActive = this.toggleActive.bind(this)
     this.handlePlay = this.handlePlay.bind(this)
+    this.createInst = this.createInst.bind(this)
   }
   makeRow() {
     let row = []
@@ -28,6 +29,19 @@ export class Snare extends React.Component {
     this.setState({
       snare: row
     })
+    this.createInst()
+  }
+  createInst() {
+    const synth = new Tone.MembraneSynth().toMaster()
+    const synthPart = new Tone.Sequence(
+      function(time, note) {
+        synth.triggerAttackRelease(note, '10hz', time)
+      },
+      this.state.snare,
+      '16n'
+    )
+    synthPart.start()
+    this.setState({instrument: synthPart})
   }
   toggleActive(idx) {
     this.setState({
@@ -39,70 +53,32 @@ export class Snare extends React.Component {
   pushSnareVal(idx) {
     this.toggleActive(idx)
     this.state.snare[idx] === null
-      ? (this.state.snare[idx] = 'C3')
-      : (this.state.snare[idx] = null)
+      ? (this.state.snare[idx] = 'B3') && this.state.instrument.at(idx, 'B3')
+      : this.state.snare[idx] && this.state.instrument.at(idx, [null])
     this.toggleActive(idx)
-    // console.log(idx)
-    // console.log(this.state.snare)
   }
   handlePlay() {
-    const snare = new Tone.MembraneSynth().toMaster()
-
-    const snarePart = new Tone.Sequence(
-      function(time, note) {
-        snare.triggerAttackRelease(note, '10hz', time)
-      },
-      this.state.snare,
-      '16n'
-    )
-    // Tone.Transport.loopEnd = '1m'
-    // Tone.Transport.loop = true
-    // snarePart.start()
-    // Tone.Transport.start()
-    // snare.sync()
+    Tone.Transport.start()
   }
 
   render() {
     // console.log(this.state.snare)
     const {snare} = this.state
     return (
-      <div>
-        <Row>
-          <Col xs={2}>
-            <Card>
-              <Row>
-                <Col xs={6}>
-                  <button
-                    type="button"
-                    className="on-Off"
-                    onClick={this.handlePlay}
-                  >
-                    X
-                  </button>
-                </Col>
-                <Col xs={6}>
-                  <Card.Title className="track-title">Snare</Card.Title>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col xs={10}>
-            {snare
-              ? snare.map((cell, idx) => (
-                  <div
-                    className={
-                      this.state.active.includes(idx)
-                        ? `cell cell-color ${this.state.css}`
-                        : `cell cell-color`
-                    }
-                    onClick={() => this.pushSnareVal(idx)}
-                    key={idx}
-                  />
-                ))
-              : 'no cell'}
-          </Col>
-        </Row>
-        <button onClick={() => player.start()}>test</button>
+      <div className="center">
+        {snare
+          ? snare.map((cell, idx) => (
+              <div
+                className={
+                  this.state.active.includes(idx)
+                    ? `cell cell-color ${this.state.css}`
+                    : `cell cell-color`
+                }
+                onClick={() => this.pushSnareVal(idx)}
+                key={idx}
+              />
+            ))
+          : 'no cell'}
       </div>
     )
   }
