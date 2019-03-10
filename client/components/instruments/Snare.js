@@ -42,8 +42,8 @@ export class Snare extends React.Component {
       ? (this.state.snare[idx] = 'C3')
       : (this.state.snare[idx] = null)
     this.toggleActive(idx)
-    console.log(idx)
-    console.log(this.state.snare)
+    // console.log(idx)
+    // console.log(this.state.snare)
   }
   handlePlay() {
     const snare = new Tone.MembraneSynth().toMaster()
@@ -63,7 +63,7 @@ export class Snare extends React.Component {
   }
 
   render() {
-    console.log(this.state.snare)
+    // console.log(this.state.snare)
     const {snare} = this.state
     return (
       <div>

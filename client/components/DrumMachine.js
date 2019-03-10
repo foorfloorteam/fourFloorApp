@@ -10,16 +10,21 @@ export class DrumMachine extends React.Component {
     this.state = {
         currentPattern: demoTrack,
         position: 0,
-        playing: false
+        playing: false,
+        synth: []
     }
-    this.handlePlay = this.handlePlay.bind(this)
     this.updatePattern = this.updatePattern.bind(this)
     this.positionMarker = this.positionMarker.bind(this)
+    this.startStop = this.startStop.bind(this)
+    this.createInst = this.createInst.bind(this)
   }
   componentDidMount() {
     Tone.Transport.scheduleRepeat(this.positionMarker, '16n');
+    Tone.Transport.loop = true;
+    Tone.Transport.setLoopPoints(0, '1m');
+    this.createInst()
   }
-  handlePlay() {
+  createInst() {
     const synth = new Tone.MembraneSynth().toMaster()
     const synthPart1 = new Tone.Sequence(
       function(time, note) {
@@ -28,22 +33,26 @@ export class DrumMachine extends React.Component {
       this.state.currentPattern[0],
       '16n'
     )
-    const synthPart2 = new Tone.Sequence(
-      function(time, note) {
-        synth.triggerAttackRelease(note, '10hz', time)
-      },
-      this.state.currentPattern[1],
-      '16n'
-    )
     synthPart1.loop = true
     synthPart1.start()
-    synthPart2.start()
-    Tone.Transport.setLoopPoints(0, '1m');
-    Tone.Transport.loop = true;
-    Tone.Transport.start()
+    this.setState({synth: [...this.state.synth, synthPart1]})
+  }
+  startStop() {
+    if (!this.state.playing) {
+      this.setState({playing: true})
+      Tone.Transport.start()
+    } else {
+      this.setState({playing: false})
+      Tone.Transport.pause()
+    }
   }
   updatePattern(channelNum, channelIndex) {
     if (channelNum === 0) {
+      if (this.state.currentPattern[channelNum][channelIndex] === null) {
+        this.state.synth[0].at(channelIndex, 'C4')
+      } else {
+        this.state.synth[0].at(channelIndex, null)
+      }
       this.state.currentPattern[channelNum][channelIndex] === null ?
       this.state.currentPattern[channelNum][channelIndex] = 'C2' :
       this.state.currentPattern[channelNum][channelIndex] = null
@@ -52,15 +61,13 @@ export class DrumMachine extends React.Component {
       this.state.currentPattern[channelNum][channelIndex] = 'C4' :
       this.state.currentPattern[channelNum][channelIndex] = null
     }
-
-      console.log(this.state.currentPattern[1])
       this.forceUpdate()
   }
   positionMarker() {
     this.setState({ position: PositionTransform[Tone.Transport.position.slice(0, 5)] });
   }
   render() {
-    console.log(this.state.position)
+    // console.log(this.state.position)
     function makeRow(v, i){
       let pattern = v.slice()
       return (
@@ -75,7 +82,7 @@ export class DrumMachine extends React.Component {
     return (
       <div className="center">
         {this.state.currentPattern.map(makeRow, this)}
-        <button onClick={this.handlePlay}>start</button>
+        <button onClick={this.startStop}>start</button>
       </div>
     )
   }
