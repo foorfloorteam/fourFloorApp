@@ -2,8 +2,8 @@ import React from 'react'
 import {demoTrack} from '../../public/scripts/demo'
 import {Row} from './Row'
 import Tone from 'Tone'
-import PositionTransform from '../../public/scripts/position'
-import {connect} from 'react-redux'
+import PositionTransform from '../../public/scripts/position';
+import { connect } from 'react-redux'
 import {Kick} from './instruments/Kick'
 import {Button} from 'react-bootstrap'
 
@@ -11,18 +11,32 @@ export class DrumMachine extends React.Component {
   constructor() {
     super()
     this.state = {
-      currentPattern: demoTrack,
-      position: 0,
-      playing: false,
-      synth: []
+        currentPattern: demoTrack,
+        position: 0,
+        playing: false,
+        synth: []
     }
     this.updatePattern = this.updatePattern.bind(this)
     this.positionMarker = this.positionMarker.bind(this)
     this.startStop = this.startStop.bind(this)
     this.createInst = this.createInst.bind(this)
+    this.test = this.test.bind(this)
   }
   componentDidMount() {
     this.createInst()
+  }
+  test(channelNum, channelIndex) {
+    if (!this.state.playing) {
+      Tone.Transport.schedule(function(time){
+        //use the time argument to schedule a callback with Tone.Draw
+        Tone.Draw.schedule(function(){
+          //do drawing or DOM manipulation here
+          let cell = document.getElementsByClassName('test')[0]
+          cell.style.backgroundColor = 'red'
+          console.log('TEST', cell)
+        }, time)
+      }, this.state.position)
+    }
   }
   createInst() {
     const synth = new Tone.MembraneSynth().toMaster()
@@ -63,23 +77,16 @@ export class DrumMachine extends React.Component {
     synthPart3.start()
     synthPart4.start()
     // Tone.Transport.scheduleRepeat(this.positionMarker, '16n');
-    Tone.Transport.setLoopPoints(0, '1m')
-    Tone.Transport.loop = true
+    Tone.Transport.setLoopPoints(0, '1m');
+    Tone.Transport.loop = true;
     Tone.Transport.bpm.value = 120
-    this.setState({
-      synth: [
-        ...this.state.synth,
-        synthPart1,
-        synthPart2,
-        synthPart3,
-        synthPart4
-      ]
-    })
+    this.setState({synth: [...this.state.synth, synthPart1, synthPart2, synthPart3, synthPart4]})
   }
   startStop() {
     if (!this.state.playing) {
       this.setState({playing: true})
       Tone.Transport.start()
+      this.test()
     } else {
       this.setState({playing: false})
       Tone.Transport.pause()
@@ -92,48 +99,45 @@ export class DrumMachine extends React.Component {
       } else {
         this.state.synth[0].at(channelIndex, [null])
       }
-      this.state.currentPattern[channelNum][channelIndex] === null
-        ? (this.state.currentPattern[channelNum][channelIndex] = 'C4')
-        : (this.state.currentPattern[channelNum][channelIndex] = null)
+      this.state.currentPattern[channelNum][channelIndex] === null ?
+      this.state.currentPattern[channelNum][channelIndex] = 'C4' :
+      this.state.currentPattern[channelNum][channelIndex] = null
     } else if (channelNum === 1) {
       if (this.state.currentPattern[channelNum][channelIndex] === null) {
         this.state.synth[1].at(channelIndex, 'B3')
       } else {
         this.state.synth[1].at(channelIndex, [null])
       }
-      this.state.currentPattern[channelNum][channelIndex] === null
-        ? (this.state.currentPattern[channelNum][channelIndex] = 'B3')
-        : (this.state.currentPattern[channelNum][channelIndex] = null)
+      this.state.currentPattern[channelNum][channelIndex] === null ?
+      this.state.currentPattern[channelNum][channelIndex] = 'B3' :
+      this.state.currentPattern[channelNum][channelIndex] = null
     } else if (channelNum === 2) {
       if (this.state.currentPattern[channelNum][channelIndex] === null) {
         this.state.synth[2].at(channelIndex, 'A3')
       } else {
         this.state.synth[2].at(channelIndex, [null])
       }
-      this.state.currentPattern[channelNum][channelIndex] === null
-        ? (this.state.currentPattern[channelNum][channelIndex] = 'A3')
-        : (this.state.currentPattern[channelNum][channelIndex] = null)
+      this.state.currentPattern[channelNum][channelIndex] === null ?
+      this.state.currentPattern[channelNum][channelIndex] = 'A3' :
+      this.state.currentPattern[channelNum][channelIndex] = null
     } else if (channelNum === 3) {
       if (this.state.currentPattern[channelNum][channelIndex] === null) {
         this.state.synth[3].at(channelIndex, 'G3')
       } else {
         this.state.synth[3].at(channelIndex, [null])
       }
-      this.state.currentPattern[channelNum][channelIndex] === null
-        ? (this.state.currentPattern[channelNum][channelIndex] = 'G3')
-        : (this.state.currentPattern[channelNum][channelIndex] = null)
+      this.state.currentPattern[channelNum][channelIndex] === null ?
+      this.state.currentPattern[channelNum][channelIndex] = 'G3' :
+      this.state.currentPattern[channelNum][channelIndex] = null
     }
 
-    this.forceUpdate()
+      this.forceUpdate()
   }
   positionMarker() {
-    this.setState({
-      position: PositionTransform[Tone.Transport.position.slice(0, 5)]
-    })
+    this.setState({ position: PositionTransform[Tone.Transport.position.slice(0, 5)] });
   }
   render() {
-    console.log(this.state.currentPattern)
-    function makeRow(v, i) {
+    function makeRow(v, i){
       let pattern = v.slice()
       return (
         <Row
@@ -152,9 +156,7 @@ export class DrumMachine extends React.Component {
           <br />
           <h4>Drums</h4>
           <Kick />
-          <Button variant="dark" onClick={this.startStop}>
-            <i className="fas fa-play" /> / <i className="fas fa-pause" />
-          </Button>
+          <Button variant="dark" onClick={this.startStop}><i className="fas fa-play"></i> / <i className="fas fa-pause"></i></Button>
         </div>
       </div>
     )
@@ -162,3 +164,4 @@ export class DrumMachine extends React.Component {
 }
 
 export default connect(null)(DrumMachine)
+
