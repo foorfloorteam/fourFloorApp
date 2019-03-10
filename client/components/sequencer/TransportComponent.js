@@ -92,9 +92,9 @@ class TransportComponent extends React.Component {
           </button>
         </>
         <>
-          {/* {this.state.trackList.map((track, i) => {
+          {this.state.trackList.map((track, i) => {
             return <TrackComponent key={`trackList-${i}`} track={track} />
-          })} */}
+          })}
         </>
       </>
     )
