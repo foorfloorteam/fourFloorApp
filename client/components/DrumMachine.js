@@ -3,7 +3,9 @@ import {demoTrack} from '../../public/scripts/demo'
 import {Row} from './Row'
 import Tone from 'Tone'
 import PositionTransform from '../../public/scripts/position';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
+import {Kick} from './instruments/Kick'
+import {Button} from 'react-bootstrap'
 
 export class DrumMachine extends React.Component {
   constructor() {
@@ -18,9 +20,23 @@ export class DrumMachine extends React.Component {
     this.positionMarker = this.positionMarker.bind(this)
     this.startStop = this.startStop.bind(this)
     this.createInst = this.createInst.bind(this)
+    this.test = this.test.bind(this)
   }
   componentDidMount() {
     this.createInst()
+  }
+  test(channelNum, channelIndex) {
+    if (!this.state.playing) {
+      Tone.Transport.schedule(function(time){
+        //use the time argument to schedule a callback with Tone.Draw
+        Tone.Draw.schedule(function(){
+          //do drawing or DOM manipulation here
+          let cell = document.getElementsByClassName('test')[0]
+          cell.style.backgroundColor = 'red'
+          console.log('TEST', cell)
+        }, time)
+      }, this.state.position)
+    }
   }
   createInst() {
     const synth = new Tone.MembraneSynth().toMaster()
@@ -63,13 +79,14 @@ export class DrumMachine extends React.Component {
     // Tone.Transport.scheduleRepeat(this.positionMarker, '16n');
     Tone.Transport.setLoopPoints(0, '1m');
     Tone.Transport.loop = true;
-    Tone.Transport.bpm.value = 100
+    Tone.Transport.bpm.value = 120
     this.setState({synth: [...this.state.synth, synthPart1, synthPart2, synthPart3, synthPart4]})
   }
   startStop() {
     if (!this.state.playing) {
       this.setState({playing: true})
       Tone.Transport.start()
+      this.test()
     } else {
       this.setState({playing: false})
       Tone.Transport.pause()
@@ -120,7 +137,6 @@ export class DrumMachine extends React.Component {
     this.setState({ position: PositionTransform[Tone.Transport.position.slice(0, 5)] });
   }
   render() {
-    console.log(this.state.currentPattern)
     function makeRow(v, i){
       let pattern = v.slice()
       return (
@@ -129,6 +145,7 @@ export class DrumMachine extends React.Component {
           channelNum={i}
           channel={pattern}
           updatePattern={this.updatePattern}
+          playing={this.state.playing}
         />
       )
     }
@@ -136,7 +153,10 @@ export class DrumMachine extends React.Component {
       <div className="pannel">
         <div className="center">
           {this.state.currentPattern.map(makeRow, this)}
-          <button onClick={this.startStop}><i class="fas fa-play"></i> / <i class="fas fa-pause"></i></button>
+          <br />
+          <h4>Drums</h4>
+          <Kick />
+          <Button variant="dark" onClick={this.startStop}><i className="fas fa-play"></i> / <i className="fas fa-pause"></i></Button>
         </div>
       </div>
     )
@@ -144,3 +164,4 @@ export class DrumMachine extends React.Component {
 }
 
 export default connect(null)(DrumMachine)
+

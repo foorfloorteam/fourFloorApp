@@ -23,25 +23,23 @@ nav a {
   color: white;
 }
 nav a:hover {
-  color:rgb(85, 171, 237);
+  color: rgb(85, 171, 237);
   text-decoration: none;
 }
-h4 {
-  margin-left: 25px;
-  display: inline-block;
-}
-form div {
-  margin: 1em;
-  display: inline-block;
-}
 
+h4 {
+  color: white !important;
+}
+input {
+  width: 50%;
+}
 .cell {
   margin-bottom: 10px;
   margin-right: 10px;
   width: 40px;
   height: 40px;
   display: inline-block;
-  border-radius: 5px
+  border-radius: 5px;
 }
 .cell-color {
   background-color: rgb(85, 171, 237);
@@ -51,6 +49,22 @@ form div {
   background-color: rgb(216, 216, 90);
 }
 
+@keyframes activeCell {
+  from {
+    background-color: rgb(85, 171, 237);
+  }
+  to {
+    background-color: rgb(216, 216, 90);
+  }
+}
+
+.blink {
+  animation-name: activeCell;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: both;
+}
 .on-Off {
   display: inline-block;
   width: 20px;
@@ -66,6 +80,9 @@ form div {
   width: 50em;
   margin: 0 auto;
 }
+.form-center {
+  text-align: center;
+}
 
 .pannel {
   background-color: rgb(82, 75, 75);
@@ -73,5 +90,24 @@ form div {
   padding-top: 100px;
   padding-bottom: 100px;
   margin: 0 auto;
-  border-radius: 5px
+  border-radius: 5px;
 }
+
+.text-center {
+  text-align: center;
+}
+
+.marg-top {
+  margin-top: 50px;
+}
+
+.pad-top-bottom {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.card-color {
+  background-color: rgb(206, 199, 199) !important;
+  border: none !important;
+}
+

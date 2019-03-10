@@ -10,20 +10,28 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
+          <Link to="/home">fourFloor</Link>
+          <a className="float-right" href="#" onClick={handleClick}>
             Logout
           </a>
+          <Link className="float-right" to="/home">
+            Home
+          </Link>
         </div>
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
+          <Link to="/home">fourFloor</Link>
+          <Link className="float-right" to="/signup">
+            Sign Up
+          </Link>
+          <Link className="float-right" to="/login">
+            Login
+          </Link>
         </div>
       )}
     </nav>
-    < br/>
+    <br />
   </div>
 )
 
@@ -53,3 +61,4 @@ Navbar.propTypes = {
   handleClick: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired
 }
+
