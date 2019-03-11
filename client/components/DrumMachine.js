@@ -6,7 +6,7 @@ import PositionTransform from '../../public/scripts/position';
 import { connect } from 'react-redux'
 import {Kick} from './instruments/Kick'
 import {Button} from 'react-bootstrap'
-
+import {Time} from './Time'
 export class DrumMachine extends React.Component {
   constructor() {
     super()
@@ -137,6 +137,7 @@ export class DrumMachine extends React.Component {
     return (
       <div className="pannel">
         <div className="center">
+        <Time playing={this.state.playing}/>
           {this.state.currentPattern.map(makeRow, this)}
           <br />
           <h4>Drums</h4>
