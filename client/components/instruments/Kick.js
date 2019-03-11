@@ -50,16 +50,22 @@ export class Kick extends React.Component {
     })
   }
   pushKickVal(idx) {
-    this.state.kick[idx] === null
-      ? (this.state.kick[idx] = 'C1') && this.state.instrument.at(idx, 'C1')
-      : this.state.kick[idx] && this.state.instrument.at(idx, [null])
+    if (this.state.kick[idx] === null) {
+      this.state.instrument.at(idx, 'C1')
+      this.state.kick[idx] = 'C1'
+    } else {
+      this.state.instrument.remove(idx)
+      this.state.kick[idx] = null
+    }
+    // this.state.kick[idx] === null
+    //   ? (this.state.kick[idx] = 'C1') && this.state.instrument.at(idx, 'C1')
+    //   : this.state.kick[idx] && this.state.instrument.remove(idx)
     this.toggleActive(idx)
   }
   handlePlay() {
     Tone.Transport.start()
   }
   render() {
-    console.log(this.state)
     const {kick} = this.state
     return (
       <div className="center">

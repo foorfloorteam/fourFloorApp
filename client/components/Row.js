@@ -1,7 +1,6 @@
 import React from 'react'
 
 export const Row = props => {
-  console.log(props.playing)
   function makeButtonRow(v, i) {
     const activeClass = v ? 'active' : ''
     const playing = !props.playing && activeClass ? 'blink' : ''
