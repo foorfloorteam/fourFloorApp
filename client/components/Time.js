@@ -8,62 +8,44 @@ export class Time extends React.Component {
       timer: [],
       active: [],
       css: 'active',
-      instrument: []
+      instrument: [],
+      divs: []
     }
     this.test = this.test.bind(this)
-    this.createInst = this.createInst.bind(this)
   }
   makeRow() {
-    const column = document.getElementsByClassName('time-cell')
     let row = []
-    for (let i = 0; i < 16; i++) {
-      row.push(column)
+    for (let i = 0; i < 1; i++) {
+      row.push('C1')
     }
     return row
   }
-  componentDidMount() {
+  test() {
+    const div = this.state.divs[0]
+    if (this.props.playing) {
+      Tone.Transport.schedule(function(time){
+        Tone.Draw.schedule(function(){
+          div.style.backgroundColor = 'rgb(216, 216, 90)'
+        }, time)
+        Tone.Draw.schedule(function(){
+          div.style.backgroundColor = 'rgb(131, 129, 129)'
+        }, time + 0.16)
+      }, "0")
+    }
+  }
+  async componentDidMount() {
     const row = this.makeRow()
     this.setState({
       timer: row
     })
-    this.createInst()
-  }
-  createInst() {
-    const timer = new Tone.MembraneSynth()
-    const timePart = new Tone.Sequence(
-      function(time, note) {
-        timer.triggerAttackRelease(note, '10hz', time)
-        Tone.Draw.schedule(function(){
-          note.style.backgroundColor = 'rgb(216, 216, 90)'
-        })
-      },
-      this.state.timer[0],
-      '16n'
-    )
-    timePart.start()
-    this.setState({instrument: timePart})
-  }
-  test() {
-    const column = document.getElementsByClassName('time-cell')
-    if (this.props.playing) {
-      Tone.Transport.schedule(function(time){
-        //use the time argument to schedule a callback with Tone.Draw
-        Tone.Draw.schedule(function(){
-          //do drawing or DOM manipulation here
-          column[0].style.backgroundColor = 'rgb(216, 216, 90)'
-        }, time)
-      }, '0')
-      Tone.Transport.schedule(function(time){
-        //use the time argument to schedule a callback with Tone.Draw
-        Tone.Draw.schedule(function(){
-          //do drawing or DOM manipulation here
-          column[0].style.backgroundColor = 'rgb(131, 129, 129)'
-        }, time + 0.16)
-      }, '0')
-    }
+    const column = await document.getElementsByClassName('time-cell')
+    const div = []
+    Array.prototype.forEach.call(column, function(val, idx){
+      div.push(val)
+    })
+    this.setState({divs: div})
   }
   render() {
-    console.log(this.state.timer[0])
     const {timer} = this.state
     return (
       <div className="center">
