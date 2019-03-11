@@ -57,9 +57,6 @@ export class Kick extends React.Component {
       this.state.instrument.remove(idx)
       this.state.kick[idx] = null
     }
-    // this.state.kick[idx] === null
-    //   ? (this.state.kick[idx] = 'C1') && this.state.instrument.at(idx, 'C1')
-    //   : this.state.kick[idx] && this.state.instrument.remove(idx)
     this.toggleActive(idx)
   }
   handlePlay() {

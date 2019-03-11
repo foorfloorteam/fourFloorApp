@@ -141,7 +141,7 @@ export class DrumMachine extends React.Component {
           <br />
           <h4>Drums</h4>
           <Kick />
-          <Button variant="dark" onClick={this.startStop}><i className="fas fa-play"></i> / <i className="fas fa-pause"></i></Button>
+          <Button variant="dark" onClick={this.startStop}><i className="fas fa-play" /> / <i className="fas fa-pause" /></Button>
         </div>
       </div>
     )
