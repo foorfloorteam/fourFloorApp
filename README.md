@@ -19,7 +19,13 @@ Check out the [deployed app](https://four-floor.herokuapp.com/) on **Heroku**
 
 ## Getting Started
 
-If you wish to
+`Fork and clone this repository`
+
+`npm install`
+
+`npm run seed`
+
+`npm run start-dev`
 
 ## Acknowledgements
 
