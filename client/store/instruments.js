@@ -4,5 +4,9 @@ const getInstruments = instruments => (
 {type: GET_INSTRUMENTS, instruments})
 
 export const getInstrument = () => async dispatch => {
-  dispatch(getInstruments())
+  try {
+    dispatch(getInstruments())
+  } catch (error) {
+    console.log(error)
+  }
 }

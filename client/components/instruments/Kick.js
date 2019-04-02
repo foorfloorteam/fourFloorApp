@@ -63,7 +63,6 @@ export class Kick extends React.Component {
     Tone.Transport.start()
   }
   render() {
-    console.log(this.state)
     const {kick} = this.state
     return (
       <div className="center">

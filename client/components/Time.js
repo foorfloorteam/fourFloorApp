@@ -5,49 +5,52 @@ export class Time extends React.Component {
   constructor() {
     super()
     this.state = {
-      time: [],
+      timer: [],
       active: [],
       css: 'active',
-      instrument: []
+      instrument: [],
+      divs: []
     }
     this.test = this.test.bind(this)
   }
   makeRow() {
     let row = []
-    for (let i = 0; i < 16; i++) {
-      row.push(null)
+    for (let i = 0; i < 1; i++) {
+      row.push('C1')
     }
     return row
   }
-  componentDidMount() {
+  test() {
+    const div = this.state.divs[0]
+    if (this.props.playing) {
+      Tone.Transport.schedule(function(time){
+        Tone.Draw.schedule(function(){
+          div.style.backgroundColor = 'rgb(216, 216, 90)'
+        }, time)
+        Tone.Draw.schedule(function(){
+          div.style.backgroundColor = 'rgb(131, 129, 129)'
+        }, time + 0.16)
+      }, "0")
+    }
+  }
+  async componentDidMount() {
     const row = this.makeRow()
     this.setState({
-      time: row
+      timer: row
     })
-  }
-  test() {
-      // Tone.Transport.schedule(function(time){
-      //   //use the time argument to schedule a callback with Tone.Draw
-      //   Tone.Draw.schedule(function(){
-      //     //do drawing or DOM manipulation here
-      //     column[14].style.backgroundColor = 'rgb(216, 216, 90)'
-      //   }, time + 1.12)
-      // }, '0')
-      // Tone.Transport.schedule(function(time){
-      //   //use the time argument to schedule a callback with Tone.Draw
-      //   Tone.Draw.schedule(function(){
-      //     //do drawing or DOM manipulation here
-      //     column[14].style.backgroundColor = 'rgb(131, 129, 129)'
-      //   }, time + 1.2)
-      // }, '0')
-    // }
+    const column = await document.getElementsByClassName('time-cell')
+    const div = []
+    Array.prototype.forEach.call(column, function(val, idx){
+      div.push(val)
+    })
+    this.setState({divs: div})
   }
   render() {
-    const {time} = this.state
+    const {timer} = this.state
     return (
       <div className="center">
-        {time
-          ? time.map((cell, idx) => (
+        {timer
+          ? timer.map((cell, idx) => (
               <div
                 className={
                   this.state.active.includes(idx)
