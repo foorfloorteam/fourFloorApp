@@ -4,6 +4,8 @@ _A Web-Based Music Creation Tool_
 
 fourFloor is an audio sequencer, created in the likeness of timeless electronic music instruments that have preceded. The Web Audio API and the Tone.js framework provide the precise timing contexts and workflows that were needed to achieve this in the short amount of time allotted for this project.
 
+![screenshot](https://github.com/foorfloorteam/fourFloorApp/blob/master/Screen%20Shot%202019-04-02%20at%203.01.36%20PM.png)
+
 ## Authors
 
 - [Grant Weiss](https://github.com/grantweiss)
