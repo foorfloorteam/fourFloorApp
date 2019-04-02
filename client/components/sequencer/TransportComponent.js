@@ -20,17 +20,25 @@ class TransportComponent extends React.Component {
   }
 
   onPlay = async e => {
-    e.preventDefault()
-    Tone.Transport.start()
-    await this.setState(() => ({playbackState: Tone.Transport.state}))
-    this.followTransport()
+    try {
+      e.preventDefault()
+      Tone.Transport.start()
+      await this.setState(() => ({playbackState: Tone.Transport.state}))
+      this.followTransport()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   onStop = async e => {
-    e.preventDefault()
-    Tone.Transport.stop()
-    await this.setState(() => ({playbackState: Tone.Transport.state}))
-    clearInterval(this.interval)
+    try {
+      e.preventDefault()
+      Tone.Transport.stop()
+      await this.setState(() => ({playbackState: Tone.Transport.state}))
+      clearInterval(this.interval)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   handleIncrement = e => {
@@ -44,8 +52,12 @@ class TransportComponent extends React.Component {
   }
 
   setTempo = async newTempo => {
-    Tone.Transport.bpm.value = newTempo
-    await this.setState(() => ({tempo: Math.round(Tone.Transport.bpm.value)}))
+    try {
+      Tone.Transport.bpm.value = newTempo
+      await this.setState(() => ({tempo: Math.round(Tone.Transport.bpm.value)}))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   clearButtonInterval = () => {
