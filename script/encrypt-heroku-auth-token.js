@@ -62,8 +62,7 @@ const getOutputFromCommand = async (command, args) => {
       })
     })
     return response
-  }
-  catch(error) {
+  } catch (error) {
     return error
   }
 }
@@ -94,8 +93,7 @@ const encryptHerokuToken = async () => {
       '-out',
       '.tmp.token.enc'
     ])
-  }
-  catch(error) {
+  } catch (error) {
     return error
   }
 }
@@ -178,8 +176,7 @@ const main = async () => {
       if (verbose) console.log('Cleaned up on error!')
       process.exit(1)
     })
-  }
-  catch(error) {
+  } catch (error) {
     return error
   }
 }
