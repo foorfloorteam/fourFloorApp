@@ -41,26 +41,31 @@ const getRemoteURL = (name, remotes) => {
 
 /* Run a command and return its stdout. */
 const getOutputFromCommand = async (command, args) => {
-  const response = await new Promise((resolve, reject) => {
-    const process = spawn(command, args)
+  try {
+    const response = await new Promise((resolve, reject) => {
+      const process = spawn(command, args)
 
-    const stdout = []
-    const stderr = []
+      const stdout = []
+      const stderr = []
 
-    process.stdout.on('data', data => {
-      stdout.push(data)
+      process.stdout.on('data', data => {
+        stdout.push(data)
+      })
+
+      process.stderr.on('data', data => {
+        stderr.push(data)
+      })
+
+      process.on('close', code => {
+        if (code) throw new Error(reject(stderr))
+        resolve(stdout)
+      })
     })
-
-    process.stderr.on('data', data => {
-      stderr.push(data)
-    })
-
-    process.on('close', code => {
-      if (code) throw new Error(reject(stderr))
-      resolve(stdout)
-    })
-  })
-  return response
+    return response
+  }
+  catch(error) {
+    return error
+  }
 }
 
 /* Use git remote URLs to get app identifiers. */
@@ -77,17 +82,22 @@ const getNamesFromGit = () =>
 
 /* Use the openssl command to encrypt an authentication token. */
 const encryptHerokuToken = async () => {
-  await getOutputFromCommand('openssl', [
-    'rsautl',
-    '-encrypt',
-    '-pubin',
-    '-inkey',
-    '.tmp.key.pem',
-    '-in',
-    '.tmp.token.txt',
-    '-out',
-    '.tmp.token.enc'
-  ])
+  try {
+    await getOutputFromCommand('openssl', [
+      'rsautl',
+      '-encrypt',
+      '-pubin',
+      '-inkey',
+      '.tmp.key.pem',
+      '-in',
+      '.tmp.token.txt',
+      '-out',
+      '.tmp.token.enc'
+    ])
+  }
+  catch(error) {
+    return error
+  }
 }
 
 /* Write the encrypted key, and other values, to the .travis.yml file. */
@@ -121,52 +131,57 @@ const updateTravisYAML = (app, key) => {
 }
 
 const main = async () => {
-  const verbose = process.argv.hasOwnProperty(2)
-  const {fullName, appName} = await getNamesFromGit()
+  try {
+    const verbose = process.argv.hasOwnProperty(2)
+    const {fullName, appName} = await getNamesFromGit()
 
-  /* Get Heroku authentication token from the Heroku CLI. */
-  const herokuTokenOut = await getOutputFromCommand('heroku', ['auth:token'])
-  const herokuTokenStr = herokuTokenOut.toString('utf-8')
-  const herokuToken = herokuTokenStr.slice(0, herokuTokenStr.length - 1)
-  if (verbose) console.log('Received Heroku token', herokuToken.toString())
+    /* Get Heroku authentication token from the Heroku CLI. */
+    const herokuTokenOut = await getOutputFromCommand('heroku', ['auth:token'])
+    const herokuTokenStr = herokuTokenOut.toString('utf-8')
+    const herokuToken = herokuTokenStr.slice(0, herokuTokenStr.length - 1)
+    if (verbose) console.log('Received Heroku token', herokuToken.toString())
 
-  /* Download the repo's public key supplied by Travis. */
-  const travisURL = `https://api.travis-ci.org/repos/${fullName}/key`
-  const travisResponse = await axios.get(travisURL)
-  const key = travisResponse.data.key
-  const keyBuffer = Buffer.from(key, 'utf-8')
-  if (verbose) console.log('Received Travis pubkey:\n', keyBuffer.toString())
+    /* Download the repo's public key supplied by Travis. */
+    const travisURL = `https://api.travis-ci.org/repos/${fullName}/key`
+    const travisResponse = await axios.get(travisURL)
+    const key = travisResponse.data.key
+    const keyBuffer = Buffer.from(key, 'utf-8')
+    if (verbose) console.log('Received Travis pubkey:\n', keyBuffer.toString())
 
-  /* Write files for use with openssl */
-  fs.writeFileSync('.tmp.key.pem', key)
-  fs.writeFileSync('.tmp.token.txt', herokuToken)
+    /* Write files for use with openssl */
+    fs.writeFileSync('.tmp.key.pem', key)
+    fs.writeFileSync('.tmp.token.txt', herokuToken)
 
-  /* Encrypt the Heroku token and save it in the .tmp.token.enc file. */
-  await encryptHerokuToken()
+    /* Encrypt the Heroku token and save it in the .tmp.token.enc file. */
+    await encryptHerokuToken()
 
-  /* Encode the encrypted data in base64. */
-  const keyBase64 = fs.readFileSync('.tmp.token.enc').toString('base64')
-  if (verbose) console.log('Encrypted key base 64 encoded:', keyBase64)
+    /* Encode the encrypted data in base64. */
+    const keyBase64 = fs.readFileSync('.tmp.token.enc').toString('base64')
+    if (verbose) console.log('Encrypted key base 64 encoded:', keyBase64)
 
-  /* Delete temporary files. */
-  clean()
-
-  /* Add the encrypted key to the .travis.yml file. */
-  const update = updateTravisYAML(appName, keyBase64)
-  if (update) console.log(successMessage)
-
-  /* Clean up in the case of unspecified errors. */
-  process.on('uncaughtException', () => {
+    /* Delete temporary files. */
     clean()
-    if (verbose) console.log('Cleaned up on error!')
-    process.exit(1)
-  })
 
-  process.on('unhandledRejection', () => {
-    clean()
-    if (verbose) console.log('Cleaned up on error!')
-    process.exit(1)
-  })
+    /* Add the encrypted key to the .travis.yml file. */
+    const update = updateTravisYAML(appName, keyBase64)
+    if (update) console.log(successMessage)
+
+    /* Clean up in the case of unspecified errors. */
+    process.on('uncaughtException', () => {
+      clean()
+      if (verbose) console.log('Cleaned up on error!')
+      process.exit(1)
+    })
+
+    process.on('unhandledRejection', () => {
+      clean()
+      if (verbose) console.log('Cleaned up on error!')
+      process.exit(1)
+    })
+  }
+  catch(error) {
+    return error
+  }
 }
 
 if (require.main === module) {
