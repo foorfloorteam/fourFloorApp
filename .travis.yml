@@ -1,12 +1,11 @@
 language: node_js
 node_js:
-  - node # uses most recent stable node version
+  - 14 # uses version 14
 services:
   - postgresql # starts up postgres
 addons:
-  postgresql: '9.6' # highest available postgres version on Travis
-dist: trusty # uses trusty environment
-sudo: false # when on trusty, uses Docker containers for speed
+  postgresql: '10' # recent postgres version on Travis
+dist: xenial # uses xenial environment
 notifications:
   email:
     on_success: change # default: change (only when going from broken to fixed)
@@ -16,9 +15,8 @@ install:
 before_script:
   - psql -c 'create database "boilermaker-test";' -U postgres # remember to change this name if you change it elsewhere (e.g. package.json)
 script:
-  - npm test             # test the code
+  - npm test # test the code
   - npm run build-client # make the bundle
-
 # before_deploy:
 #   - rm -rf node_modules # omit from the tarball, since we skip cleanup
 # deploy:
